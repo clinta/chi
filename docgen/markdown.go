@@ -20,8 +20,9 @@ type MarkdownDoc struct {
 }
 
 type MarkdownOpts struct {
-	ProjectPath string
-	Intro       string
+	ProjectPath        string
+	Intro              string
+	ForceRelativeLinks bool
 }
 
 func MarkdownRoutesDoc(r chi.Router, opts MarkdownOpts) string {
@@ -175,7 +176,7 @@ func (md *MarkdownDoc) WriteRoutes() {
 
 func (md *MarkdownDoc) githubSourceURL(file string, line int) string {
 	// Currently, we only link to source for github projects
-	if strings.Index(file, "github.com/") != 0 {
+	if strings.Index(file, "github.com/") != 0 && !md.Opts.ForceRelativeLinks {
 		return ""
 	}
 	if md.Opts.ProjectPath == "" {
